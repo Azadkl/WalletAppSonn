@@ -12,11 +12,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     @IBOutlet weak var balanceLabel: UILabel!
     @IBOutlet weak var amountTextField: UITextField!
     @IBOutlet weak var transactionTableView: UITableView!
-    @IBOutlet weak var segmentedControl: UISegmentedControl! // Segment kontrolü
+    @IBOutlet weak var segmentedControl: UISegmentedControl!
 
     var balance: Double = 0.0
     var transactions: [Transaction] = []
-    var filteredTransactions: [Transaction] = [] // Filtrelenmiş işlemler
+    var filteredTransactions: [Transaction] = [] 
 
     let incomeCategories = ["Maaş", "Prim", "Hediye", "Diğer"]
     let expenseCategories = ["Market", "Kira", "Eğlence", "Ulaşım", "Diğer"]
@@ -27,7 +27,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Kredi kartı arka plan resmi
+       
         let creditCardImageView = UIImageView(image: UIImage(named: "creditCardImage"))
         creditCardImageView.contentMode = .scaleAspectFill
         creditCardImageView.frame = CGRect(x: 0, y: 100, width: self.view.frame.width, height: 80)
@@ -37,14 +37,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         transactionTableView.delegate = self
         transactionTableView.dataSource = self
 
-        // SegmentedControl'e değer değişikliği için hedef ekleyin
+       
         segmentedControl.addTarget(self, action: #selector(segmentChanged), for: .valueChanged)
 
         loadTransactionsFromFile()
         updateBalance()
         updateBalanceLabel()
 
-        // İlk başta tüm verileri göster
+       
         filterTransactions()
     }
 
@@ -54,11 +54,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 
     func filterTransactions() {
         switch segmentedControl.selectedSegmentIndex {
-        case 0: // Tümü
+        case 0: 
             filteredTransactions = transactions
-        case 1: // Gelir
+        case 1:
             filteredTransactions = transactions.filter { $0.type == "Gelir" }
-        case 2: // Gider
+        case 2: 
             filteredTransactions = transactions.filter { $0.type == "Gider" }
         default:
             filteredTransactions = transactions
@@ -92,7 +92,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             self.saveTransactionsToFile()
             self.updateBalance()
             self.updateBalanceLabel()
-            self.filterTransactions() // Veriler silindiğinde filtreyi yeniden uygula
+            self.filterTransactions() 
         })
 
         alert.addAction(UIAlertAction(title: "İptal", style: .cancel))
@@ -165,7 +165,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 
         updateBalance()
         updateBalanceLabel()
-        filterTransactions() // Yeni işlem eklendiğinde filtreyi yeniden uygula
+        filterTransactions() 
         amountTextField.text = ""
         saveTransactionsToFile()
     }
@@ -181,15 +181,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         return filteredTransactions.count
     }
 
-        // Hücreyi sola kaydırınca silme işlemi
-    // iOS 11 and later
+
     func tableView(_ tableView: UITableView,
                    trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let deleteAction = UIContextualAction(style: .destructive, title: "Sil") { (action, view, completionHandler) in
-            // Filtrelenmiş listedeki veriyi sil
+        
             let transactionToDelete = self.filteredTransactions[indexPath.row]
             
-            // Orijinal transactions dizisinden de sil
+         
             if let originalIndex = self.transactions.firstIndex(where: {
                 $0.date == transactionToDelete.date &&
                 $0.amount == transactionToDelete.amount &&
@@ -199,25 +198,25 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 self.transactions.remove(at: originalIndex)
             }
             
-            // Filtrelenmiş listeden kaldır
+      
             self.filteredTransactions.remove(at: indexPath.row)
             
-            // Bakiye ve UI'yı güncelle
+        
             self.updateBalance()
             self.updateBalanceLabel()
             self.saveTransactionsToFile()
             
-            // Delete the row in the table view with animation
+          
             tableView.deleteRows(at: [indexPath], with: .automatic)
             
-            // Inform the system that the action is complete
+      
             completionHandler(true)
         }
         
-        // Configure swipe action
-        deleteAction.backgroundColor = .systemRed  // Optional: Set background color
+       
+        deleteAction.backgroundColor = .systemRed  
         
-        // Return the configuration with the custom action
+       
         let swipeActions = UISwipeActionsConfiguration(actions: [deleteAction])
         return swipeActions
     }
