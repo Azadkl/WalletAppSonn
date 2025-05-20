@@ -9,7 +9,7 @@ class DetailChartViewController: UIViewController {
 
     var transactions: [Transaction] = []
 
-    // Renk sözlükleri
+
     let incomeCategoryColors: [String: UIColor] = [
         "Maaş": .systemGreen,
         "Prim": .systemBlue,
@@ -52,20 +52,20 @@ class DetailChartViewController: UIViewController {
         let entries = categoryTotals.map {
             PieChartDataEntry(
                 value: $0.value,
-                label: "\($0.key) %\(String(format: "%.1f", $0.value / total * 100))" // Tek satırda gösteriliyor
+                label: "\($0.key) %\(String(format: "%.1f", $0.value / total * 100))" 
             )
         }
 
         let dataSet = PieChartDataSet(entries: entries, label: "Gelir Dağılımı")
         dataSet.colors = entries.map {
-            let categoryName = $0.label?.components(separatedBy: " ").first ?? "" // Kategori adı alınıyor
+            let categoryName = $0.label?.components(separatedBy: " ").first ?? "" 
             return incomeCategoryColors[categoryName] ?? .lightGray
         }
 
         dataSet.drawValuesEnabled = false
         dataSet.entryLabelColor = .black
         dataSet.valueTextColor = .black
-        dataSet.valueFont = .systemFont(ofSize: 10) // Font boyutu küçültüldü
+        dataSet.valueFont = .systemFont(ofSize: 10) 
 
         incomeChartView.data = PieChartData(dataSet: dataSet)
         incomeChartView.centerText = "Gelir"
@@ -89,20 +89,20 @@ class DetailChartViewController: UIViewController {
         let entries = categoryTotals.map {
             PieChartDataEntry(
                 value: $0.value,
-                label: "\($0.key) %\(String(format: "%.1f", $0.value / total * 100))" // Tek satırda gösteriliyor
+                label: "\($0.key) %\(String(format: "%.1f", $0.value / total * 100))" 
             )
         }
 
         let dataSet = PieChartDataSet(entries: entries, label: "Gider Dağılımı")
         dataSet.colors = entries.map {
-            let categoryName = $0.label?.components(separatedBy: " ").first ?? "" // Kategori adı alınıyor
+            let categoryName = $0.label?.components(separatedBy: " ").first ?? "" 
             return expenseCategoryColors[categoryName] ?? .lightGray
         }
 
         dataSet.drawValuesEnabled = false
         dataSet.entryLabelColor = .black
         dataSet.valueTextColor = .black
-        dataSet.valueFont = .systemFont(ofSize: 10) // Font boyutu küçültüldü
+        dataSet.valueFont = .systemFont(ofSize: 10) 
 
         expenseChartView.data = PieChartData(dataSet: dataSet)
         expenseChartView.centerText = "Gider"
